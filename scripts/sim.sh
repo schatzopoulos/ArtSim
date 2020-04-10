@@ -33,7 +33,6 @@ do
 	}" > $config
 	echo $1
 
-	# java -jar /opt/SciNeM-workflows/similarity/EntitySimilarity.jar -c $config
-	java -jar ../EntitySimilarity-1.0-SNAPSHOT.jar -c $config
+	java -jar ../EntitySimilarity-1.0-SNAPSHOT.jar -c $config > $hin_input"_join.csv"
 	rm $config
 done
