@@ -1,0 +1,6 @@
+[submodule "HeySim"]
+	path = HeySim
+	url = https://github.com/schatzopoulos/HeySim.git
+[submodule "libs/HeySim"]
+	path = libs/HeySim
+	url = https://github.com/schatzopoulos/HeySim.git
