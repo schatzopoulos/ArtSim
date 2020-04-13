@@ -4,8 +4,8 @@ import statistics
 
 pp = pprint.PrettyPrinter(indent=4)
 
-if len(sys.argv) != 6:
-    print("Usage: python sim.py <paper_details_file> <scores_file> <sim_file> <cold_start_year> <aggr: median|mean>")
+if len(sys.argv) != 7:
+    print("Usage: python sim.py <paper_details_file> <scores_file> <sim_file> <cold_start_year> <aggr: median|mean> <alpha>")
     sys.exit(-1)
 
 
@@ -14,6 +14,7 @@ scores_file = sys.argv[2]
 sim_file = sys.argv[3]
 cold_start_year = int(sys.argv[4])
 aggr = sys.argv[5]
+alpha = float(sys.argv[6])
 
 # load paper code & ids
 paper_ids = {}
@@ -83,17 +84,21 @@ with open(sim_file) as fp:
 result = []
 for key in papers:
     if 'similar' in papers[key]: 
-        score = 0.0
+        score = papers[key]['score']
 
         # if it has similar papers
         if len(papers[key]['similar']) > 0:
             
             # gather scores of similar papers
             scores = [item[2] for item in papers[key]['similar']]
+            # scores.append(score)
+
             if aggr == 'median':
-                score = statistics.median(scores)
+                sim_score = statistics.median(scores)
             else:
-                score = statistics.mean(scores)
+                sim_score = statistics.mean(scores)
+            
+            score = alpha * score + (1-alpha) * sim_score
 
         result.append((papers[key]['code'], score, papers[key]['year']))
 
