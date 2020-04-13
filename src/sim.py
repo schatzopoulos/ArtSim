@@ -104,8 +104,8 @@ for alpha in weights:
                 if 'similar' in papers[key]: 
                     score = papers[key]['score']
 
-                    # if it has similar papers
-                    if len(papers[key]['similar']['PA']) > 0 or len(papers[key]['similar']['PT']) > 0:
+                    sim_score_PA = 0.0
+                    if len(papers[key]['similar']['PA']) > 0:
                         
                         # calculate score from PA similarities
                         scores_PA = [item[2] for item in papers[key]['similar']['PA']]
@@ -114,7 +114,9 @@ for alpha in weights:
                             sim_score_PA = statistics.median(scores_PA)
                         else:
                             sim_score_PA = statistics.mean(scores_PA)
-                        
+
+                    sim_score_PT = 0.0    
+                    if  len(papers[key]['similar']['PT']) > 0:
 
                         # calculate score from PT similarities
                         scores_PT = [item[2] for item in papers[key]['similar']['PT']]
@@ -124,7 +126,7 @@ for alpha in weights:
                         else:
                             sim_score_PT = statistics.mean(scores_PT)
 
-                        score = alpha * score + beta * sim_score_PA + gamma * sim_score_PT
+                    score = alpha * score + beta * sim_score_PA + gamma * sim_score_PT
 
                     fw.write(papers[key]['code'] + "\t" + str(score) + "\t" + str(papers[key]['year']) + "\n")
 
