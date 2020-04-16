@@ -87,51 +87,51 @@ with open(scores_file) as fp:
 read_similarties(sim_file_PA, 'PA')
 read_similarties(sim_file_PT, 'PT')
 
-weights = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
+# weights = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
+weights = ((0.2, 0.1, 0.7), (0.3, 0.1, 0.6), (0.6, 0.1, 0.3), (0.7, 0.1, 0.2))
 
-for alpha in weights:
-    for beta in weights: 
-        for gamma in weights:
-            if alpha + beta + gamma != 1:
-                continue
+for w in weights:
+    alpha = w[0]
+    beta = w[1]
+    gamma = w[2]
 
+    print (str(alpha) + "\t" + str(beta) + "\t" + str(gamma))
 
-            print (str(alpha) + "\t" + str(beta) + "\t" + str(gamma))
-            fw = open(output_dir + str(alpha) + "_" + str(beta) + "_" + str(gamma) + ".csv", "w")
+    fw = open(output_dir + str(alpha) + "_" + str(beta) + "_" + str(gamma) + ".csv", "w")
 
-            result = []
-            for key in papers:
-                if 'similar' in papers[key]: 
-                    score = papers[key]['score']
+    result = []
+    for key in papers:
+        if 'similar' in papers[key]: 
+            score = papers[key]['score']
 
-                    sim_score_PA = 0.0
-                    if len(papers[key]['similar']['PA']) > 0:
-                        
-                        # calculate score from PA similarities
-                        scores_PA = [item[2] for item in papers[key]['similar']['PA']]
-
-                        if aggr == 'median':
-                            sim_score_PA = statistics.median(scores_PA)
-                        else:
-                            sim_score_PA = statistics.mean(scores_PA)
-
-                    sim_score_PT = 0.0    
-                    if  len(papers[key]['similar']['PT']) > 0:
-
-                        # calculate score from PT similarities
-                        scores_PT = [item[2] for item in papers[key]['similar']['PT']]
-
-                        if aggr == 'median':
-                            sim_score_PT = statistics.median(scores_PT)
-                        else:
-                            sim_score_PT = statistics.mean(scores_PT)
-
-                    score = alpha * score + beta * sim_score_PA + gamma * sim_score_PT
-
-                    fw.write(papers[key]['code'] + "\t" + str(score) + "\t" + str(papers[key]['year']) + "\n")
-
-                else:
-                    result.append((papers[key]['code'], papers[key]['score'], papers[key]['year']))
-                    fw.write(papers[key]['code'] + "\t" + str(papers[key]['score']) + "\t" + str(papers[key]['year']) + "\n")
+            sim_score_PA = 0.0
+            if len(papers[key]['similar']['PA']) > 0:
                 
-            fw.close()
+                # calculate score from PA similarities
+                scores_PA = [item[2] for item in papers[key]['similar']['PA']]
+
+                if aggr == 'median':
+                    sim_score_PA = statistics.median(scores_PA)
+                else:
+                    sim_score_PA = statistics.mean(scores_PA)
+
+            sim_score_PT = 0.0    
+            if  len(papers[key]['similar']['PT']) > 0:
+
+                # calculate score from PT similarities
+                scores_PT = [item[2] for item in papers[key]['similar']['PT']]
+
+                if aggr == 'median':
+                    sim_score_PT = statistics.median(scores_PT)
+                else:
+                    sim_score_PT = statistics.mean(scores_PT)
+
+            score = alpha * score + beta * sim_score_PA + gamma * sim_score_PT
+
+            fw.write(papers[key]['code'] + "\t" + str(score) + "\t" + str(papers[key]['year']) + "\n")
+
+        else:
+            result.append((papers[key]['code'], papers[key]['score'], papers[key]['year']))
+            fw.write(papers[key]['code'] + "\t" + str(papers[key]['score']) + "\t" + str(papers[key]['year']) + "\n")
+        
+    fw.close()
