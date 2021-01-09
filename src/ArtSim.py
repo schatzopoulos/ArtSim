@@ -8,7 +8,7 @@ class ArtSim:
     _papers = {}
 
     # read similarities
-    def read_similarties(sim_file, sim_name):
+    def read_similarties(self, sim_file, sim_name):
         sim_count = 0
         with open(sim_file) as fp:
             line = fp.readline()
@@ -34,7 +34,7 @@ class ArtSim:
                 line = fp.readline()
 
     # load paper code & ids
-    def read_paper_ids(paper_details):
+    def read_paper_ids(self, paper_details):
         with open(paper_details, encoding="utf8") as fp:
             line = fp.readline()
             while line:
@@ -44,7 +44,7 @@ class ArtSim:
                 line = fp.readline()
 
     # read paper scores and publication year
-    def read_paper_scores(scores_file, cold_start_year):
+    def read_paper_scores(self, scores_file, cold_start_year):
         
         papers_num = 0
         papers_in_cold_start_num = 0
@@ -77,7 +77,7 @@ class ArtSim:
         return papers_num, papers_in_cold_start_num
 
 
-    def run(alpha, beta, gamma, output_file):
+    def run(self, alpha, beta, gamma, output_file):
         print (str(alpha) + "\t" + str(beta) + "\t" + str(gamma))
 
         fw = open(output_file, "w")

@@ -23,6 +23,9 @@ artsim = ArtSim()
 artsim.read_paper_ids(paper_details)
 total_papers, papers_in_cold_start = artsim.read_paper_scores(scores_file, cold_start_year)
 
+print(total_papers)
+print(papers_in_cold_start)
+
 artsim.read_similarties(self.sim_file_PA, 'PA')
 artsim.read_similarties(self.sim_file_PT, 'PT')
 
