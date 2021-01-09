@@ -27,7 +27,7 @@ class ArtSim:
                         self._papers[src_id]['similar'][sim_name].append((dest_id, float(parts[2]), self._papers[dest_id]['score']))
                         sim_count += 1
 
-                    if 'similar' in papers[dest_id]:
+                    if 'similar' in self._papers[dest_id]:
                         self._papers[dest_id]['similar'][sim_name].append((src_id, float(parts[2]), self._papers[src_id]['score']))
                         sim_count += 1
                 

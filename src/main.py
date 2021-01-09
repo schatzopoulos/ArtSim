@@ -21,15 +21,21 @@ gamma = 1 - alpha - beta
 artsim = ArtSim()
 
 artsim.read_paper_ids(paper_details)
+print("Done read_paper_ids")
 total_papers, papers_in_cold_start = artsim.read_paper_scores(scores_file, cold_start_year)
+print("Done read_paper_scores")
 
 print(total_papers)
 print(papers_in_cold_start)
 
 artsim.read_similarties(sim_file_PA, 'PA')
+print("Done read_similarties PA")
 artsim.read_similarties(sim_file_PT, 'PT')
+print("Done read_similarties PT")
 
 artsim.run(alpha, beta, gamma, output_file)
+print("Done run")
 
 kendall_tau = tau(dblp_fcc, output_file)
+print("Done tau")
 print(kendall_tau)
