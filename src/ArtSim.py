@@ -24,6 +24,8 @@ class ArtSim:
                 if src_id in self._papers and dest_id in self._papers:
                     
                     self.check_paper_in_similarities(src_id)
+                    self.check_paper_in_similarities(dest_id)
+
                     self._similarities[src_id][sim_name].append((dest_id, float(parts[2]), self._papers[dest_id]['score']))
                     self._similarities[dest_id][sim_name].append((src_id, float(parts[2]), self._papers[src_id]['score']))
                     
