@@ -1,5 +1,5 @@
 import sys
-import ArtSim
+from ArtSim import ArtSim
 from rank_distance import tau
 
 if len(sys.argv) != 10:
