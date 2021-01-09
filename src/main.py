@@ -33,7 +33,7 @@ print("Done read_similarities PA")
 artsim.read_similarities(sim_file_PT, 'PT')
 print("Done read_similarities PT")
 
-artsim.run(alpha, beta, gamma, output_file)
+artsim.run(alpha, beta, gamma, aggr, output_file)
 print("Done run")
 
 kendall_tau = tau(dblp_fcc, output_file)
