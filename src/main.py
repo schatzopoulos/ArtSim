@@ -4,8 +4,8 @@ from rank_distance import tau
 
 dblp_fcc = "../data/evaluation/dblp_fcc_varying_future_period_30percent.txt"
 
-if len(sys.argv) != 10:
-    print("Usage: python main.py <paper_details_file> <scores_file> <sim_file1> <sim_file2> <cold_start_year> <aggr: median|mean> <output_file> <alpha> <beta>")
+if len(sys.argv) != 8:
+    print("Usage: python main.py <paper_details_file> <scores_file> <sim_file1> <sim_file2> <cold_start_year> <aggr: median|mean> <output_file>")
     sys.exit(-1)
 
 
@@ -16,9 +16,6 @@ sim_file_PT = sys.argv[4]
 cold_start_year = int(sys.argv[5])
 aggr = sys.argv[6]
 output_file = sys.argv[7]
-alpha = float(sys.argv[8])
-beta = float(sys.argv[9])
-gamma = 1 - alpha - beta
 
 artsim = ArtSim()
 
@@ -35,9 +32,13 @@ print("Done read_similarities PA")
 artsim.read_similarities(sim_file_PT, 'PT')
 print("Done read_similarities PT")
 
-artsim.run(alpha, beta, gamma, aggr, output_file)
-print("Done run")
+params = [(0,0), (0,0.1), (0,0.2), (0,0.3), (0,0.4), (0,0.5), (0,0.6), (0,0.7), (0,0.8), (0,0.9), (0,1), (0.1,0), (0.1,0.1), (0.1,0.2), (0.1,0.3), (0.1,0.4), (0.1,0.5), (0.1,0.6), (0.1,0.7), (0.1,0.8), (0.1,0.9), (0.2,0), (0.2,0.1), (0.2,0.2), (0.2,0.3), (0.2,0.4), (0.2,0.5), (0.2,0.6), (0.2,0.7), (0.2,0.8), (0.3,0), (0.3,0.1), (0.3,0.2), (0.3,0.3), (0.3,0.4), (0.3,0.5), (0.3,0.6), (0.3,0.7), (0.4,0), (0.4,0.1), (0.4,0.2), (0.4,0.3), (0.4,0.4), (0.4,0.5), (0.4,0.6), (0.5,0), (0.5,0.1), (0.5,0.2), (0.5,0.3), (0.5,0.4), (0.5,0.5), (0.6,0), (0.6,0.1), (0.6,0.2), (0.6,0.3), (0.6,0.4), (0.7,0), (0.7,0.1), (0.7,0.2), (0.7,0.3), (0.8,0), (0.8,0.1), (0.8,0.2), (0.9,0), (0.9,0.1), (1,0)]
+for alpha, beta in params:
+	
+	gamma = 1.0 - alpha - beta
+	
+	artsim.run(alpha, beta, gamma, aggr, output_file)
+	kendall_tau = tau(dblp_fcc, output_file)
 
-kendall_tau = tau(dblp_fcc, output_file)
-print("Done tau")
-print(kendall_tau)
+	print (str(alpha) + "\t" + str(beta) + "\t" + str(kendall_tau))
+	
