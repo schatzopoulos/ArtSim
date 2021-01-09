@@ -4,8 +4,8 @@ import statistics
 pp = pprint.PrettyPrinter(indent=4)
 
 class ArtSim:
-    self._paper_ids = {}
-    self._papers = {}
+    _paper_ids = {}
+    _papers = {}
 
     # read similarities
     def read_similarties(self, sim_file, sim_name):
