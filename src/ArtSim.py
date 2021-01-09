@@ -6,6 +6,7 @@ pp = pprint.PrettyPrinter(indent=4)
 class ArtSim:
     _paper_ids = {}
     _papers = {}
+    _similarities = {}
 
     # read similarities
     def read_similarities(self, sim_file, sim_name):
@@ -22,14 +23,8 @@ class ArtSim:
                 # keep similarities for those papers inside the training set
                 if src_id in self._papers and dest_id in self._papers:
 
-                    # 'similar' field is present only for papers in cold start
-                    if 'similar' in self._papers[src_id]:
-                        self._papers[src_id]['similar'][sim_name].append((dest_id, float(parts[2]), self._papers[dest_id]['score']))
-                        sim_count += 1
-
-                    if 'similar' in self._papers[dest_id]:
-                        self._papers[dest_id]['similar'][sim_name].append((src_id, float(parts[2]), self._papers[src_id]['score']))
-                        sim_count += 1
+                    self._similarities[src_id][sim_name].append((dest_id, float(parts[2]), self._papers[dest_id]['score']))
+                    self._similarities[dest_id][sim_name].append((src_id, float(parts[2]), self._papers[src_id]['score']))
                 
                 line = fp.readline()
 
@@ -46,9 +41,6 @@ class ArtSim:
     # read paper scores and publication year
     def read_paper_scores(self, scores_file, cold_start_year):
         
-        papers_num = 0
-        papers_in_cold_start_num = 0
-
         with open(scores_file) as fp:
 
             line = fp.readline()
@@ -61,20 +53,28 @@ class ArtSim:
                 self._papers[paper_id] = {
                     'code': parts[0],
                     'score': float(parts[1]), 
-                    'year': pub_year
+                    'year': pub_year,
+                    'inColdStart': pub_year >= cold_start_year
                 }
 
                 # TODO: move to init function so as to reuse function
-                if pub_year >= cold_start_year:
-                    self._papers[paper_id]['similar'] = {}
-                    self._papers[paper_id]['similar']['PA'] = []
-                    self._papers[paper_id]['similar']['PT'] = []
+                # if pub_year >= cold_start_year:
 
-                    papers_in_cold_start_num += 1
+                #     self._papers[paper_id] = {}
+                #     self._papers[paper_id]['PA'] = []
+                #     self._papers[paper_id]['PT'] = []
+
+                #     papers_in_cold_start_num += 1
 
                 line = fp.readline()
-                papers_num += 1
-        return papers_num, papers_in_cold_start_num
+    
+    def aggregate_score(self, paper_id, similarity_type, aggr):
+        scores_PA = [item[2] for item in self._similarities[paper_id][similarity_type]]
+
+        if aggr == 'median':
+            return statistics.median(scores_PA)
+        else:
+            return statistics.mean(scores_PA)
 
 
     def run(self, alpha, beta, gamma, aggr, output_file):
@@ -83,30 +83,20 @@ class ArtSim:
         fw = open(output_file, "w")
 
         for key in self._papers:
-            if 'similar' in self._papers[key]: 
+            if self._papers[key]['inColdStart'] == True: 
                 score = self._papers[key]['score']
 
+                # calculate score from PA similarities
                 sim_score_PA = 0.0
-                if len(self._papers[key]['similar']['PA']) > 0:
-
-                    # calculate score from PA similarities
-                    scores_PA = [item[2] for item in self._papers[key]['similar']['PA']]
-
-                    if aggr == 'median':
-                        sim_score_PA = statistics.median(scores_PA)
-                    else:
-                        sim_score_PA = statistics.mean(scores_PA)
+                if len(self._similarities[key]['PA']) > 0:
+                    sim_score_PA = self.aggregate_score(key, 'PA', aggr)
+                    
 
                 sim_score_PT = 0.0    
-                if  len(self._papers[key]['similar']['PT']) > 0:
+                if len(self._similarities[key]['PT']) > 0:
 
                     # calculate score from PT similarities
-                    scores_PT = [item[2] for item in self._papers[key]['similar']['PT']]
-
-                    if aggr == 'median':
-                        sim_score_PT = statistics.median(scores_PT)
-                    else:
-                        sim_score_PT = statistics.mean(scores_PT)
+                    scores_PT = self.aggregate_score(key, 'PT', aggr)
 
                 score = alpha * sim_score_PA + beta * sim_score_PT + gamma * score
 
