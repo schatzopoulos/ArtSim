@@ -8,7 +8,7 @@ class ArtSim:
     _papers = {}
 
     # read similarities
-    def read_similarties(self, sim_file, sim_name):
+    def read_similarities(self, sim_file, sim_name):
         sim_count = 0
         with open(sim_file) as fp:
             line = fp.readline()
