@@ -1,3 +1,4 @@
+import sys
 import ArtSim
 from rank_distance import tau
 
@@ -6,15 +7,15 @@ if len(sys.argv) != 10:
     sys.exit(-1)
 
 
-paper_details = args[1]
-scores_file = args[2]
-sim_file_PA = args[3]
-sim_file_PT = args[4]
-cold_start_year = int(args[5])
-aggr = args[6]
-output_file = args[7]
-alpha = float(args[8])
-beta = float(args[9])
+paper_details = sys.argv[1]
+scores_file = sys.argv[2]
+sim_file_PA = sys.argv[3]
+sim_file_PT = sys.argv[4]
+cold_start_year = int(sys.argv[5])
+aggr = sys.argv[6]
+output_file = sys.argv[7]
+alpha = float(sys.argv[8])
+beta = float(sys.argv[9])
 gamma = 1 - alpha - beta
 
 artsim = ArtSim()
