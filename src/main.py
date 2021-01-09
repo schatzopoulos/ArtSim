@@ -26,8 +26,8 @@ total_papers, papers_in_cold_start = artsim.read_paper_scores(scores_file, cold_
 print(total_papers)
 print(papers_in_cold_start)
 
-artsim.read_similarties(self.sim_file_PA, 'PA')
-artsim.read_similarties(self.sim_file_PT, 'PT')
+artsim.read_similarties(sim_file_PA, 'PA')
+artsim.read_similarties(sim_file_PT, 'PT')
 
 artsim.run(alpha, beta, gamma, output_file)
 
