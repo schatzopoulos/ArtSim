@@ -24,8 +24,11 @@ artsim = ArtSim()
 
 artsim.read_paper_ids(paper_details)
 print("Done read_paper_ids")
-artsim.read_paper_scores(scores_file, cold_start_year)
+artsim.read_paper_scores(scores_file)
 print("Done read_paper_scores")
+
+artsim.mark_cold_start_papers(cold_start_year)
+print("Done mark_cold_start_papers")
 
 artsim.read_similarities(sim_file_PA, 'PA')
 print("Done read_similarities PA")

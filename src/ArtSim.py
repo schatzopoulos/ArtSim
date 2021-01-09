@@ -23,18 +23,17 @@ class ArtSim:
                 # keep similarities for those papers inside the training set
                 if src_id in self._papers and dest_id in self._papers:
                     
-                    self.check_similarities(src_id, sim_name)
+                    self.check_paper_in_similarities(src_id)
                     self._similarities[src_id][sim_name].append((dest_id, float(parts[2]), self._papers[dest_id]['score']))
-
-                    self.check_similarities(dest_id, sim_name)
                     self._similarities[dest_id][sim_name].append((src_id, float(parts[2]), self._papers[src_id]['score']))
-                
+                    
                 line = fp.readline()
-                
-    def check_similarities(self, paper_id, sim_name):
+
+    def check_paper_in_similarities(self, paper_id):
         if paper_id not in self._similarities:
             self._similarities[paper_id] = {}
-            self._similarities[paper_id][sim_name] = []
+            self._similarities[paper_id]['PA'] = []
+            self._similarities[paper_id]['PT'] = []
 
     # load paper code & ids
     def read_paper_ids(self, paper_details):
@@ -46,8 +45,12 @@ class ArtSim:
                 self._paper_ids[parts[1]] = int(parts[0])   
                 line = fp.readline()
 
+    def mark_cold_start_papers(self, cold_start_year):
+        for key in self._papers:
+            self._papers[key]['cold-start'] = self._papers[key]['year'] >= cold_start_year
+
     # read paper scores and publication year
-    def read_paper_scores(self, scores_file, cold_start_year):
+    def read_paper_scores(self, scores_file):
         
         with open(scores_file) as fp:
 
@@ -62,17 +65,7 @@ class ArtSim:
                     'code': parts[0],
                     'score': float(parts[1]), 
                     'year': pub_year,
-                    'inColdStart': pub_year >= cold_start_year
                 }
-
-                # TODO: move to init function so as to reuse function
-                # if pub_year >= cold_start_year:
-
-                #     self._papers[paper_id] = {}
-                #     self._papers[paper_id]['PA'] = []
-                #     self._papers[paper_id]['PT'] = []
-
-                #     papers_in_cold_start_num += 1
 
                 line = fp.readline()
     
@@ -91,7 +84,7 @@ class ArtSim:
         fw = open(output_file, "w")
 
         for key in self._papers:
-            if self._papers[key]['inColdStart'] == True: 
+            if self._papers[key]['cold-start'] == True: 
                 score = self._papers[key]['score']
 
                 # calculate score from PA similarities
@@ -99,7 +92,6 @@ class ArtSim:
                 if len(self._similarities[key]['PA']) > 0:
                     sim_score_PA = self.aggregate_score(key, 'PA', aggr)
                     
-
                 sim_score_PT = 0.0    
                 if len(self._similarities[key]['PT']) > 0:
 
