@@ -2,12 +2,8 @@ import sys
 from ArtSim import ArtSim
 from rank_distance import tau
 
-<<<<<<< Updated upstream
 dblp_fcc = "../data/evaluation/dblp_fcc_varying_future_period_30percent.txt"
 
-=======
-dblp_fcc = ""
->>>>>>> Stashed changes
 if len(sys.argv) != 10:
     print("Usage: python main.py <paper_details_file> <scores_file> <sim_file1> <sim_file2> <cold_start_year> <aggr: median|mean> <output_file> <alpha> <beta>")
     sys.exit(-1)
