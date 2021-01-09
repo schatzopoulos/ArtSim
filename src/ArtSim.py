@@ -91,11 +91,11 @@ class ArtSim:
 
                 # calculate score from PA similarities
                 sim_score_PA = 0.0
-                if len(self._similarities[key]['PA']) > 0:
+                if key in self._similarities and len(self._similarities[key]['PA']) > 0:
                     sim_score_PA = self.aggregate_score(key, 'PA', aggr)
                     
                 sim_score_PT = 0.0    
-                if len(self._similarities[key]['PT']) > 0:
+                if key in self._similarities and len(self._similarities[key]['PT']) > 0:
 
                     # calculate score from PT similarities
                     scores_PT = self.aggregate_score(key, 'PT', aggr)
