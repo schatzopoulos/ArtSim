@@ -34,7 +34,7 @@ class ArtSim:
                 line = fp.readline()
 
     # load paper code & ids
-    def readself._paper_ids(self, paper_details):
+    def read_paper_ids(self, paper_details):
         with open(paper_details, encoding="utf8") as fp:
             line = fp.readline()
             while line:
