@@ -22,19 +22,15 @@ class ArtSim:
                 # keep similarities for those papers inside the training set
                 if src_id in self._papers and dest_id in self._papers:
                     
-                    self.check_paper_in_similarities(src_id)
-                    self.check_paper_in_similarities(dest_id)
-
                     self._papers[src_id][sim_name].append((dest_id, float(parts[2]), self._papers[dest_id]['score']))
                     self._papers[dest_id][sim_name].append((src_id, float(parts[2]), self._papers[src_id]['score']))
                     
                 line = fp.readline()
 
-    def check_paper_in_similarities(self, paper_id):
-        if paper_id not in self._similarities:
-            #self._similarities[paper_id] = {}
-            self._papers[paper_id]['PA'] = []
-            self._papers[paper_id]['PT'] = []
+    # def check_paper_in_similarities(self, paper_id):
+    #     #self._similarities[paper_id] = {}
+    #     self._papers[paper_id]['PA'] = []
+    #     self._papers[paper_id]['PT'] = []
 
     # load paper code & ids
     def read_paper_ids(self, paper_details):
@@ -66,6 +62,8 @@ class ArtSim:
                     'code': parts[0],
                     'score': float(parts[1]), 
                     'year': pub_year,
+                    'PA': [],
+                    'PT': []
                 }
 
                 line = fp.readline()
