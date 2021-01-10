@@ -80,7 +80,7 @@ class ArtSim:
 
 
     def run(self, alpha, beta, gamma, aggr, output_file):
-        print (str(alpha) + "\t" + str(beta) + "\t" + str(gamma))
+        # print (str(alpha) + "\t" + str(beta) + "\t" + str(gamma))
 
         fw = open(output_file, "w")
 
