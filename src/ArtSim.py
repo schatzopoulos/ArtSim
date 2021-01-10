@@ -6,7 +6,6 @@ pp = pprint.PrettyPrinter(indent=4)
 class ArtSim:
     _paper_ids = {}
     _papers = {}
-    _similarities = {}
 
     # read similarities
     def read_similarities(self, sim_file, sim_name):
@@ -26,16 +25,16 @@ class ArtSim:
                     self.check_paper_in_similarities(src_id)
                     self.check_paper_in_similarities(dest_id)
 
-                    self._similarities[src_id][sim_name].append((dest_id, float(parts[2]), self._papers[dest_id]['score']))
-                    self._similarities[dest_id][sim_name].append((src_id, float(parts[2]), self._papers[src_id]['score']))
+                    self._papers[src_id][sim_name].append((dest_id, float(parts[2]), self._papers[dest_id]['score']))
+                    self._papers[dest_id][sim_name].append((src_id, float(parts[2]), self._papers[src_id]['score']))
                     
                 line = fp.readline()
 
     def check_paper_in_similarities(self, paper_id):
         if paper_id not in self._similarities:
-            self._similarities[paper_id] = {}
-            self._similarities[paper_id]['PA'] = []
-            self._similarities[paper_id]['PT'] = []
+            #self._similarities[paper_id] = {}
+            self._papers[paper_id]['PA'] = []
+            self._papers[paper_id]['PT'] = []
 
     # load paper code & ids
     def read_paper_ids(self, paper_details):
@@ -71,8 +70,8 @@ class ArtSim:
 
                 line = fp.readline()
     
-    def aggregate_score(self, paper_id, similarity_type, aggr):
-        scores_PA = [item[2] for item in self._similarities[paper_id][similarity_type]]
+    def aggregate_score(self, sim_scores_array, aggr):
+        scores_PA = [item[2] for item in sim_scores_array]
 
         if aggr == 'median':
             return statistics.median(scores_PA)
@@ -85,26 +84,27 @@ class ArtSim:
 
         fw = open(output_file, "w")
 
-        for key in self._papers:
-            if self._papers[key]['cold-start'] == True: 
-                score = self._papers[key]['score']
+        for (paper_id, paper_details) in self._papers.items():
+            
+            if paper_details['cold-start'] == False:
+                fw.write(paper_details['code'] + "\t" + str(paper_details['score']) + "\t" + str(paper_details['year']) + "\n")
+                continue
+             
+            score = paper_details['score']
 
-                # calculate score from PA similarities
-                sim_score_PA = 0.0
-                if key in self._similarities and len(self._similarities[key]['PA']) > 0:
-                    sim_score_PA = self.aggregate_score(key, 'PA', aggr)
-                    
-                sim_score_PT = 0.0    
-                if key in self._similarities and len(self._similarities[key]['PT']) > 0:
+            # calculate score from PA similarities
+            sim_score_PA = 0.0
+            if len(paper_details['PA']) > 0:
+                sim_score_PA = self.aggregate_score(paper_details['PA'], aggr)
+                
+            # calculate score from PT similarities
+            sim_score_PT = 0.0    
+            if len(paper_details['PT']) > 0:
+                sim_score_PT = self.aggregate_score(paper_details['PT'], aggr)
 
-                    # calculate score from PT similarities
-                    scores_PT = self.aggregate_score(key, 'PT', aggr)
+            score = alpha * sim_score_PA + beta * sim_score_PT + gamma * score
 
-                score = alpha * sim_score_PA + beta * sim_score_PT + gamma * score
-
-                fw.write(self._papers[key]['code'] + "\t" + str(score) + "\t" + str(self._papers[key]['year']) + "\n")
-
-            else:
-                fw.write(self._papers[key]['code'] + "\t" + str(self._papers[key]['score']) + "\t" + str(self._papers[key]['year']) + "\n")
+            fw.write(paper_details['code'] + "\t" + str(score) + "\t" + str(paper_details['year']) + "\n")
+                
         fw.close()
         
