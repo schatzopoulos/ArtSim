@@ -1,6 +1,6 @@
 #!/bin/bash
 
-years=("2007" "2008" "2009" "2010")
+years=( "2007" )
 
 for year in "${years[@]}"
 do

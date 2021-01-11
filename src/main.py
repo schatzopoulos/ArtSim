@@ -1,4 +1,5 @@
 import sys
+import numpy as np
 from ArtSim import ArtSim
 from rank_distance import tau
 
@@ -20,25 +21,42 @@ output_file = sys.argv[7]
 artsim = ArtSim()
 
 artsim.read_paper_ids(paper_details)
-print("Done read_paper_ids")
 artsim.read_paper_scores(scores_file)
-print("Done read_paper_scores")
 
 artsim.mark_cold_start_papers(cold_start_year)
-print("Done mark_cold_start_papers")
 
-artsim.read_similarities(sim_file_PA, 'PA')
-print("Done read_similarities PA")
-artsim.read_similarities(sim_file_PT, 'PT')
-print("Done read_similarities PT")
+artsim.read_similarities(sim_file_PA, 'PA', aggr)
+artsim.read_similarities(sim_file_PT, 'PT', aggr)
 
-params = [(0,0.1), (0,0.2), (0,0.3), (0,0.4), (0,0.5), (0,0.6), (0,0.7), (0,0.8), (0,0.9), (0,1), (0.1,0), (0.1,0.1), (0.1,0.2), (0.1,0.3), (0.1,0.4), (0.1,0.5), (0.1,0.6), (0.1,0.7), (0.1,0.8), (0.1,0.9), (0.2,0), (0.2,0.1), (0.2,0.2), (0.2,0.3), (0.2,0.4), (0.2,0.5), (0.2,0.6), (0.2,0.7), (0.2,0.8), (0.3,0), (0.3,0.1), (0.3,0.2), (0.3,0.3), (0.3,0.4), (0.3,0.5), (0.3,0.6), (0.3,0.7), (0.4,0), (0.4,0.1), (0.4,0.2), (0.4,0.3), (0.4,0.4), (0.4,0.5), (0.4,0.6), (0.5,0), (0.5,0.1), (0.5,0.2), (0.5,0.3), (0.5,0.4), (0.5,0.5), (0.6,0), (0.6,0.1), (0.6,0.2), (0.6,0.3), (0.6,0.4), (0.7,0), (0.7,0.1), (0.7,0.2), (0.7,0.3), (0.8,0), (0.8,0.1), (0.8,0.2), (0.9,0), (0.9,0.1), (1,0)]
-for alpha, beta in params:
-	
-	gamma = 1.0 - alpha - beta
-	
-	artsim.run(alpha, beta, gamma, aggr, output_file)
-	kendall_tau = tau(dblp_fcc, output_file)
 
-	print (str(alpha) + "\t" + str(beta) + "\t" + str(gamma) + "\t" + str(kendall_tau))
-	
+for alpha in np.linspace(0, 0.6, 7):
+        for beta in np.linspace(0, 0.6, 7):
+                for gamma in np.linspace(0, 1, 11):
+                        alpha = round(alpha, 1)
+                        beta = round(beta, 1)
+                        gamma = round(gamma, 1)
+                        sum = alpha + beta + gamma
+                        if (round(sum, 1) != 1.0):
+                                continue
+
+                        artsim.run(alpha, beta, gamma, output_file)
+                        kendall_tau = tau(dblp_fcc, output_file)
+
+                        print (str(alpha) + "\t" + str(beta) + "\t" + str(gamma) + "\t" + str(kendall_tau))
+
+
+
+for alpha in np.linspace(0, 0.6, 61):
+	for beta in np.linspace(0, 0.6, 61):
+		for gamma in np.linspace(0, 1, 101):
+			alpha = round(alpha, 2)
+			beta = round(beta, 2)
+			gamma = round(gamma, 2)
+			sum = alpha + beta + gamma
+			if (round(sum, 2) != 1.0):
+				continue
+
+			artsim.run(alpha, beta, gamma, output_file)
+			kendall_tau = tau(dblp_fcc, output_file)
+
+			print (str(alpha) + "\t" + str(beta) + "\t" + str(gamma) + "\t" + str(kendall_tau))
