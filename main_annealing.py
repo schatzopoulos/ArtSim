@@ -43,7 +43,7 @@ def call_artsim(x):
 	artsim.run(alpha, beta, gamma, output_file)
     kendall_tau = tau(dblp_fcc, output_file)
 
-    print (str(artisim_count) + "\t" + str(alpha) + "\t" + str(beta) + "\t" + str(gamma) + "\t" + str(kendall_tau))
+    print (str(call_artsim.count) + "\t" + str(alpha) + "\t" + str(beta) + "\t" + str(gamma) + "\t" + str(kendall_tau))
 
     return 1 - kendall_tau
 
