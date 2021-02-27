@@ -1,14 +1,15 @@
 import sys
 import numpy as np
 from ArtSim import ArtSim
-from rank_distance import tau
+from rank_distance import tau, ndcg
 from scipy import optimize
 import time
 import pandas as pd
 
-dblp_fcc = "../data/evaluation/dblp_fcc_varying_future_period_30percent.txt"
+dblp_fcc = "../data/evaluation/dblp_fcc_varying_future_period_30percent_WITH_ZEROS.txt"
+#dblp_fcc = "../data/evaluation/topics/ground_truth/expert_finding.csv"
 
-if len(sys.argv) != 8:
+if len(sys.argv) != 9:
     print("Usage: python main.py <paper_details_file> <scores_file> <sim_file1> <sim_file2> <con_file1> <cold_start_year> <output_file>")
     sys.exit(-1)
 
@@ -20,6 +21,7 @@ sim_file_PT = sys.argv[4]
 con_file_PV = sys.argv[5]
 cold_start_year = int(sys.argv[6])
 output_file = sys.argv[7]
+k = int(sys.argv[8])
 
 artsim = ArtSim()
 
@@ -49,12 +51,12 @@ def call_artsim(x):
 
 	start = time.time()
 	result_df = pd.DataFrame(results, columns=['paper_id', 'pred_score'])
-	kendall_tau = tau(ground_truth_df, result_df)
+	ndcg_score = ndcg(ground_truth_df, result_df, k)
 	call_artsim.tau_time += (time.time() - start)
 
-	print (str(cold_start_year) + "\t" + str(call_artsim.count) + "\t" + str(alpha) + "\t" + str(beta) + "\t" + str(gamma) + "\t" + str(delta) + "\t" + str(kendall_tau))
+	print (str(cold_start_year) + "\t" + str(k) + "\t" + str(call_artsim.count) + "\t" + str(alpha) + "\t" + str(beta) + "\t" + str(gamma) + "\t" + str(delta) + "\t" + str(ndcg_score))
 
-	return 1 - kendall_tau
+	return 1 - ndcg_score
 
 bounds = [(0, 1.0), (0, 1.0), (0, 1.0)]
 
