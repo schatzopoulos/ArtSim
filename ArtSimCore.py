@@ -119,7 +119,7 @@ class ArtSimCore:
 
                 line = fp.readline()
 
-    def run(self, alpha, beta, gamma, delta, output_file):
+    def run(self, alpha, beta, gamma, delta):
         #print (str(alpha) + "\t" + str(beta) + "\t" + str(gamma))
 
         results = []

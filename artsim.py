@@ -5,7 +5,7 @@ from rank_distance import tau, ndcg
 import pandas as pd
 import time
 
-dblp_fcc = "../data/evaluation/dblp_fcc_varying_future_period_30percent_WITH_ZEROS.txt"
+dblp_fcc = "./data/evaluation/dblp_fcc_varying_future_period_30percent_WITH_ZEROS.txt"
 #dblp_fcc = "../data/evaluation/dblp_fcc_varying_future_period_30percent.txt"
 
 if len(sys.argv) != 8 and len(sys.argv) != 9:
@@ -43,7 +43,7 @@ for precision in [1]:
     splits = pow(10, precision) + 1
 
     artsim_time = 0
-    tau_time = 0
+    eval_time = 0
 
     for alpha in np.linspace(0, 1, splits):
         for beta in np.linspace(0, 1, splits):
