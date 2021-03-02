@@ -16,14 +16,13 @@ python3 artsim.py <paper_file> <scores_file> <pap_similarities_file> <ptp_simila
 ```
 
 where 
-<ul>
-  <li> `paper_file` is a tsv file for mapping internal numeric ids to actual paper ids</li>
-  <li> `scores_file` contaings paper ids and their popularity scores computed by a popularity method</li
-  <li> `pap_similarities_file` and `ptp_similarities_file` are files containing similarities based on authors and topics respectively; they contain tuples of numeric paper ids with their respecitive similarity score. `pv_connections_file` contains the paper to venue relationships. The files we used for our experiments with the DBLP dataset can be found at (Zenodo)[https://zenodo.org/record/4567527]</li>
-  <li> `cold_start_year` is the year after which we consider articles being in their cold start period.</li>
-  <li> `evaluation_method` can be one of 'tau' or 'ndcg'</li>
-  <li> in case of selecting 'ndcg' as an evaluation method in the previous parameter, we should also provide the `k` parameter of ndcg as an extra parameter</li>
-<ul>
+
+  * `paper_file` is a tsv file for mapping internal numeric ids to actual paper ids
+  * `scores_file` contaings paper ids and their popularity scores computed by a popularity method
+  * `pap_similarities_file` and `ptp_similarities_file` are files containing similarities based on authors and topics respectively; they contain tuples of numeric paper ids with their respecitive similarity score. `pv_connections_file` contains the paper to venue relationships. The files we used for our experiments with the DBLP dataset can be found at (Zenodo)[https://zenodo.org/record/4567527]
+  * `cold_start_year` is the year after which we consider articles being in their cold start period.
+  * `evaluation_method` can be one of 'tau' or 'ndcg'
+  * in case of selecting 'ndcg' as an evaluation method in the previous parameter, we should also provide the `k` parameter of ndcg as an extra parameter
 
 
 
