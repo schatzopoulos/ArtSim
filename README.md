@@ -2,6 +2,14 @@
 
 This repository contains the code for the article "ArtSim: Improved estimation of current impact for recent articles." published in AIMinScience2020.
 
+
+
+
+python3 artsim.py data/P.csv data/rival_scores_ndcg/5/ATT data/similarities/PAP_similarities.csv data/similarities/PTP_similarities.csv data/similarities/PV_connections.csv 2010 ndcg 5
+python3 artsim.py data/P.csv data/rival_scores_ndcg/5/ATT data/similarities/PAP_similarities.csv data/similarities/PTP_similarities.csv data/similarities/PV_connections.csv 2010 tau
+
+
+
 Please cite:
 
 ```
