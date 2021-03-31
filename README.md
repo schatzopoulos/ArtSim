@@ -2,11 +2,6 @@
 
 This repository contains the code for the article "ArtSim: Improved estimation of current impact for recent articles." published in AIMinScience workshop @ TPDL 2020 and its extension ArtSim+.
 
-
-
-## Installation
-TODO
-
 ## Execution
 
 ArtSim and ArtSim+ can be executed with the scripts `artsim.py` and `artsim_plus.py` respectively as follows:
