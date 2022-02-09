@@ -1,6 +1,6 @@
 # ArtSim & ArtSim+
 
-This repository contains the code for the article "ArtSim: Improved estimation of current impact for recent articles." published in AIMinScience workshop @ TPDL 2020 and its extension ArtSim+.
+This repository contains the code for the article "ArtSim: Improved estimation of current impact for recent articles." published in AIMinScience workshop @ TPDL 2020 and its extension ArtSim+ published in the QSS journal.
 
 ## Execution
 
