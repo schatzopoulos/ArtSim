@@ -24,6 +24,14 @@ where
 Please cite:
 
 ```
+@article{chatzopoulos2021further,
+  title={Further improvements on estimating the popularity of recently published papers},
+  author={Chatzopoulos, Serafeim and Vergoulis, Thanasis and Kanellos, Ilias and Dalamagas, Theodore and Tryfonopoulos, Christos},
+  journal={Quantitative Science Studies},
+  pages={1--36},
+  year={2021}
+}
+
 @inproceedings{chatzopoulos2020artsim,
   title={Artsim: improved estimation of current impact for recent articles},
   author={Chatzopoulos, Serafeim and Vergoulis, Thanasis and Kanellos, Ilias and Dalamagas, Theodore and Tryfonopoulos, Christos},
